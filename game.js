@@ -11,7 +11,7 @@ var board = [];
 //			u  b  b  b  b  b  b  b  b  u
 //			u  b  b  b  b  b  b  b  b  u
 //			u  wp wp wp wp wp wp wp wp u
-//			u  wk wa wf wv ws wf wa wk u 
+//			u  wk wa wf wv ws wf wa wk u
 //			u  u  u  u  u  u  u  u  u  u [9][9]
 
 var past = [];
@@ -46,12 +46,25 @@ var pgn = "";
 this is fired upon the press of 'start game' button. initializes the board, pieces etc.
 */
 
+function shuffle(array) {
+  let currentIndex = array.length;
+
+  while (currentIndex != 0) {
+
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
+
 document.getElementById("startgame").onclick = function () {
 
 	//checks if names have been written. if not, fires error message "where are the names"
-	if (document.getElementById("whitename").value && document.getElementById("blackname").value || 
+	if (document.getElementById("whitename").value && document.getElementById("blackname").value ||
 	    document.getElementById("whitename").value && cpumode==1) {
-		
+
 		gameOver = false;
 
 		//clean the board, fill with b=empty
@@ -65,7 +78,7 @@ document.getElementById("startgame").onclick = function () {
 				future[i][j] = 'b';
 
 			}
-		}	
+		}
 
 		// the 0th and 9th rows and columns are outside of board. so theyre u=undefined
 		for (i = 0; i<=9 ; i++) {
@@ -84,25 +97,53 @@ document.getElementById("startgame").onclick = function () {
 
 		}
 
+		let blackNonPawns = ['da', 'da', 'dk', 'dk', 'ds', 'ds', 'df', 'df']
+		let whiteNonPawns = ['wa', 'wa', 'wk', 'wk', 'ws', 'ws', 'wv', 'wv']
 
-		
-		// initial positions of pieces
-		board[1][1] = board[1][8] = 'dk';
-		board[1][2] = board[1][7] = 'da';
-		board[1][3] = board[1][6] = 'df';
-		board[1][4] = 'dv';
-		board[1][5] = 'ds';
-		board[8][1] = board[8][8] = 'wk';
-		board[8][2] = board[8][7] = 'wa';
-		board[8][3] = board[8][6] = 'wf';
-		board[8][4] = 'wv';
-		board[8][5] = 'ws';
+		shuffle(blackNonPawns)
+		shuffle(whiteNonPawns)
+
+		// initial positions of pieces (With Chess960)
+		board[1][1] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][8] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][2] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][7] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][3] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][6] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][4] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+		board[1][5] = blackNonPawns[blackNonPawns.length - 1];
+		blackNonPawns.pop();
+
+		board[8][1] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][8] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][2] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][7] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][3] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][6] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][4] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+		board[8][5] = whiteNonPawns[whiteNonPawns.length - 1];
+		whiteNonPawns.pop();
+
 		for (i = 1; i<=8; i++) {
 			board[2][i] = 'dp';
 			board[7][i] = 'wp';
 		}
-		
-		
+
+
 
 
 		// name text fields become names
@@ -166,7 +207,7 @@ function moveAttempt(x, y, fx, fy) {
 	// see if its your turn
 	if(board[y][x][0]!=(sira==1?'w':'d')) {error(text[lang][9]); return;}
 
-	
+
 
 	// if tries to attack own army
 	if (board[y][x][0]!='b' && board[y][x][0]==board[fy][fx][0]) {error(text[lang][11]); return;}
@@ -177,8 +218,8 @@ function moveAttempt(x, y, fx, fy) {
 
 
 	// if causes check
-		if ( exposed(virtualmove(x,y,fx,fy),(sira==1?'w':'d')) ) { 
-			
+		if ( exposed(virtualmove(x,y,fx,fy),(sira==1?'w':'d')) ) {
+
 			if (exposed(board,(sira==1?'w':'d'))) {
 				if ( board[y][x][1]=='s') error(text[lang][8]);
 				else error(text[lang][7]);
@@ -188,12 +229,12 @@ function moveAttempt(x, y, fx, fy) {
 		}
 
 
-	
 
-	
+
+
 	move(x,y,fx,fy);
 
-	
+
 }
 
 
@@ -214,7 +255,7 @@ function move(x, y, fx, fy) {
 	//This variable is used to determine the sound file to be executed at the end of move. Prevents more than one soundfile being played.
 	var move = 'go'; //go, kill, promotion, checkmate
 
-	
+
 
 	// this is updated every move. If king or rooks move, then player can't castle anymore.
 	if (board[8][5]!='ws') {whitelrock = false; whiterrock = false; }
@@ -268,7 +309,7 @@ function move(x, y, fx, fy) {
 
 
 
-	
+
 
 	//Copy the board positions
 	for (var i = 0; i<=9; i++) {
@@ -382,8 +423,8 @@ function move(x, y, fx, fy) {
 		return;
 	}
 
-	
-	
+
+
 
 	// Change turn and draw the updated board
 	siradegistir();
@@ -427,7 +468,7 @@ function virtualmove(x,y,fx,fy) {
 	future[y][x] = 'b';
 
 	return future;
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -491,7 +532,7 @@ function exposed(theboard, to, x, y ) {
 						if (tempy==y && tempx==x) return true;
 						if (theboard[tempy][tempx]!='b') break;
 					}
-				}	
+				}
 
 				// bishops and queens
 				var tempx = j;
@@ -553,7 +594,7 @@ function exposed(theboard, to, x, y ) {
 					if (x==j-1 && y==i+1) return true;
 					if (x==j-1 && y==i) return true;
 					if (x==j-1 && y==i-1) return true;
-					}	
+					}
 			}
 		}
 	}
@@ -735,7 +776,7 @@ function isvalid(x,y,fx,fy) {
 //////////////////////// DEBUGGING ZONE //////////////////////////////////////////////////////////////////////////////////
 /*
 function debug1() {
-	
+
 	if (document.getElementById("getexposed").value.length != 1) return;
 	var selected = document.getElementById("getexposed").value;
 
@@ -747,7 +788,7 @@ function debug1() {
 		}
 	}
 
-	
+
 }
 
 
@@ -967,14 +1008,14 @@ function siradegistir() {
 */
 
 document.getElementById("endgame").onclick = function () {
-	
+
 	// makes board empty
 	for (var i = 1; i<=8; i++) {
 		board[i] = [];
 		for (var j=1; j<=8; j++) {
 			board[i][j] = 'b';
 		}
-	}	
+	}
 
 	// touch settings
 	try {document.getElementById("p"+touchcoords[1]+"p"+touchcoords[0]).style["background-color"] = ((touchcoords[1]%2)+(touchcoords[0]%2)==1 ? '#750' : '#ee9'); } catch(e) {}
@@ -1018,7 +1059,7 @@ document.getElementById("endgame").onclick = function () {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function error(msg) {
-	
+
 	sounds_error.play();
 	document.getElementById("startgame").style.display = "none";
 	document.getElementById("endgame").style.display = "none";
@@ -1063,7 +1104,7 @@ function drawstuff () {
 
 	document.getElementById("board").innerHTML = children;
 
-	
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1089,7 +1130,7 @@ function clicked(event) {
 	document.getElementById("p"+touchcoords[1]+"p"+touchcoords[0]).style["background-color"] = "#0f0";
 	return;
 	}
-	
+
 	// Runs if cell is selected already
 	moveAttempt(touchcoords[0],touchcoords[1],event.target.id[3],event.target.id[1]);
 	document.getElementById("p"+touchcoords[1]+"p"+touchcoords[0]).style["background-color"] = ((touchcoords[1]%2)+(touchcoords[0]%2)==1 ? '#750' : '#ee9');
@@ -1097,7 +1138,7 @@ function clicked(event) {
 	touchcoords[1]=0;
 
 	draw();
-	
+
 
 }
 
@@ -1131,7 +1172,7 @@ function cpumodechange() {
 
 function cputime() {
 
-	
+
 	// cells each piece can move. (check situations aren't examined)
 	var validareas = [];
 
@@ -1165,9 +1206,9 @@ function cputime() {
 		After finding all legal moves, computer calculates the best possible move.
 		*/
 
-	
+
 		for (i = 0; i<moveableareas.length; i++) {
-			
+
 			// All possibilities
 			moveableareas[i][4] = 1;
 
@@ -1268,7 +1309,7 @@ function cputime() {
 		var decision = Math.floor(Math.random()*bestMoves.length);
 
 		moveAttempt(bestMoves[decision][3],bestMoves[decision][2],bestMoves[decision][1],bestMoves[decision][0]);
-		
+
 }
 
 
@@ -1389,7 +1430,7 @@ window.onload = function () {
 	sounds_error = new Audio("sounds/error.wav");
 	sounds_draw = new Audio("sounds/draw.wav");
 
-	
+
 	for (var i = 0; i<text.length; i++) {
 	document.getElementById("langs").innerHTML += '<span id="lang'+i+'" onclick="changelang('+i+')" style="color:#00f">'+text[i][0]+' ';
 	}
