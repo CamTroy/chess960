@@ -97,54 +97,69 @@ document.getElementById("startgame").onclick = function () {
 
 		}
 
-		let blackNonPawns = ['da', 'da', 'dk', 'dk', 'ds', 'ds', 'df', 'df']
-		let whiteNonPawns = ['wa', 'wa', 'wk', 'wk', 'ws', 'ws', 'wv', 'wv']
+		let boolChess960 = document.getElementById("newgameMode").checked;
+
+		let blackNonPawns = ['da', 'da', 'dk', 'dk', 'ds', 'df', 'df', 'dv']
+		let whiteNonPawns = ['wa', 'wa', 'wk', 'wk', 'ws', 'wv', 'wf', 'wf']
 
 		shuffle(blackNonPawns)
 		shuffle(whiteNonPawns)
 
-		// initial positions of pieces (With Chess960)
-		board[1][1] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][8] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][2] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][7] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][3] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][6] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][4] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
-		board[1][5] = blackNonPawns[blackNonPawns.length - 1];
-		blackNonPawns.pop();
+		if (boolChess960 == true) {
 
-		board[8][1] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][8] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][2] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][7] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][3] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][6] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][4] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
-		board[8][5] = whiteNonPawns[whiteNonPawns.length - 1];
-		whiteNonPawns.pop();
+			// initial positions of pieces (With Chess960)
+			board[1][1] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][8] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][2] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][7] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][3] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][6] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][4] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+			board[1][5] = blackNonPawns[blackNonPawns.length - 1];
+			blackNonPawns.pop();
+
+			board[8][1] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][8] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][2] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][7] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][3] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][6] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][4] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+			board[8][5] = whiteNonPawns[whiteNonPawns.length - 1];
+			whiteNonPawns.pop();
+		} else {
+
+			// initial positions of pieces (Without Chess960)
+			board[1][1] = board[1][8] = 'dk';
+			board[1][2] = board[1][7] = 'da';
+			board[1][3] = board[1][6] = 'df';
+			board[1][4] = 'dv';
+			board[1][5] = 'ds';
+			board[8][1] = board[8][8] = 'wk';
+			board[8][2] = board[8][7] = 'wa';
+			board[8][3] = board[8][6] = 'wf';
+			board[8][4] = 'wv';
+			board[8][5] = 'ws';
+		}
 
 		for (i = 1; i<=8; i++) {
 			board[2][i] = 'dp';
 			board[7][i] = 'wp';
 		}
-
-
-
 
 		// name text fields become names
 		document.getElementById("whitename").style.display = "none";
